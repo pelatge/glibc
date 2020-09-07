@@ -48,3 +48,8 @@
 # define SO_SNDTIMEO 21
 #endif
 #define SO_TYPE 3
+
+#define SO_RCVTIMEO_OLD 20
+#define SO_SNDTIMEO_OLD 21
+#define SO_RCVTIMEO_NEW 66
+#define SO_SNDTIMEO_NEW 67
