@@ -72,6 +72,18 @@ getsockopt32 (int fd, int level, int optname, void *optval,
 	*tv64 = valid_timeval32_to_timeval64 (tv32);
 	*len = sizeof (*tv64);
       }
+      break;
+
+    case SO_TIMESTAMP_NEW:
+    case SO_TIMESTAMPNS_NEW:
+      {
+	if (optname == SO_TIMESTAMP_NEW)
+	  optname = SO_TIMESTAMP_OLD;
+	if (optname == SO_TIMESTAMPNS_NEW)
+	  optname = SO_TIMESTAMPNS_OLD;
+	r = getsockopt_syscall (fd, level, optname, optval, len);
+      }
+      break;
     }
 
   return r;

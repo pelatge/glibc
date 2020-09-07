@@ -19,7 +19,9 @@
 /* The kernel header with SO_* constants is used as default for _GNU_SOURCE,
    however the new constants that describe 64-bit time support were added
    only on v5.1.  */
-#if !defined(SO_RCVTIMEO_NEW) || !defined(SO_RCVTIMEO_OLD)
+#if !defined(SO_RCVTIMEO_NEW) || !defined(SO_RCVTIMEO_OLD) \
+    || !defined(SO_TIMESTAMP_OLD) || !defined(SO_TIMESTAMP_NEW) \
+    || !defined(SO_TIMESTAMPNS_OLD) || !defined(SO_TIMESTAMPNS_NEW)
 # include <bits/socket-constants.h>
 #endif
 #include <time.h>
@@ -74,6 +76,18 @@ setsockopt32 (int fd, int level, int optname, const void *optval,
 
 	r = setsockopt_syscall (fd, level, optname, &tv32, sizeof (tv32));
       }
+      break;
+
+    case SO_TIMESTAMP_NEW:
+    case SO_TIMESTAMPNS_NEW:
+      {
+	if (optname == SO_TIMESTAMP_NEW)
+	  optname = SO_TIMESTAMP_OLD;
+	if (optname == SO_TIMESTAMPNS_NEW)
+	  optname = SO_TIMESTAMPNS_OLD;
+	r = setsockopt_syscall (fd, level, optname, NULL, 0);
+      }
+      break;
     }
 
   return r;
