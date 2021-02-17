@@ -70,6 +70,10 @@ tests		:= test-utime test-stat test-stat2 test-lfs tst-getcwd \
 		   tst-ftw-lnk tst-file_change_detection tst-lchmod \
 		   tst-ftw-bz26353 tst-utimensat
 
+tests-time64    := tst-stat-time64 \
+		   tst-futimesat-time64 \
+		   tst-utimensat-time64
+
 # Likewise for statx, but we do not need static linking here.
 tests-internal += tst-statx
 tests-static += tst-statx

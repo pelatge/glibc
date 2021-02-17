@@ -23,10 +23,14 @@
 #include <support/xunistd.h>
 #include <support/temp_file.h>
 
+#ifndef struct_stat
+# define struct_stat struct stat64
+#endif
+
 static int temp_fd = -1;
 
 /* struct timespec array with Y2038 threshold minus 2 and 1 seconds.  */
-const struct timespec t1[2] = { { 0x7FFFFFFE, 0 },  { 0x7FFFFFFF, 0 } };
+const static struct timespec t1[2] = { { 0x7FFFFFFE, 0 },  { 0x7FFFFFFF, 0 } };
 
 #define PREPARE do_prepare
 static void
@@ -39,7 +43,7 @@ do_prepare (int argc, char *argv[])
 static int
 test_futimens_helper (const struct timespec *ts)
 {
-  struct stat64 st;
+  struct_stat st;
   int result;
   time_t t;
 
@@ -47,7 +51,7 @@ test_futimens_helper (const struct timespec *ts)
   if (__builtin_add_overflow (ts->tv_sec, 0, &t))
     return 0;
 
-  result = futimens(temp_fd, ts);
+  result = futimens (temp_fd, ts);
   TEST_VERIFY_EXIT (result == 0);
 
   xfstat (temp_fd, &st);
